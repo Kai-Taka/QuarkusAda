@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.enterprise.inject.Produces;
 import javax.print.attribute.standard.Media;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -100,6 +101,26 @@ public class AlunosRest {
         return Response
                 .status(Response.Status.OK)
                 .entity(db.get(id))
+                .build();
+    }
+
+    @Path("/{id}")
+    @DELETE
+    public Response deleteAlunoEspecifico(@PathParam("id") Integer id)
+    {
+        if (db.containsKey(id))
+        {
+            db.remove(id);
+            return Response
+                    .status(Response.Status.NO_CONTENT)
+                    .entity("Removido aluno com id: " + id)
+                    .type(MediaType.TEXT_PLAIN)
+                    .build();
+        }
+        return Response
+                .status(Response.Status.NOT_FOUND)
+                .entity("Não há aluno com este id")
+                .type(MediaType.TEXT_PLAIN)
                 .build();
     }
 }
