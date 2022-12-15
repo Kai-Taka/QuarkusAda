@@ -1,5 +1,7 @@
 package br.com.bb.DTO;
 
+import javax.validation.metadata.ReturnValueDescriptor;
+
 public class AlunoDto {
     
     private int id;
@@ -15,6 +17,32 @@ public class AlunoDto {
     {
         this.setId(id);
         this.setName(name);
+    }
+
+    @Override
+    public String toString() {
+        return "AlunoDto(" + 
+                "id = " + getId() +
+                " name = " + getName() + ")";
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode() * getName().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null)
+        {
+            return false;
+        }
+        if (obj.getClass() != obj.getClass())
+        {
+            return false;
+        }
+        AlunoDto al = (AlunoDto) obj;
+        return (al.getId() == getId() && al.getName() == getName());
     }
 
     public void setId(int id)
