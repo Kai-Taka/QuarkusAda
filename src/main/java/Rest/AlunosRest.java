@@ -1,5 +1,6 @@
 package Rest;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +13,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
@@ -45,19 +47,27 @@ public class AlunosRest {
     }
 
     @GET
-    public Response getAllAlunos()
+    public Response getAllAlunos(@QueryParam("prefixo") String prefix)
     {
-        if (db.isEmpty())
+        log.info("Getting all alunos with prefix: " + prefix);
+
+        AlunoDto[] filtered = (AlunoDto[]) db.values().stream()
+        .filter(a -> a.getName().startsWith(prefix))
+        .toArray();
+
+        if (filtered.length == 0)
         {
             return Response
                     .status(Response.Status.NOT_FOUND)
-                    .entity("Não há nenhum aluno cadastrado")
+                    .entity(prefix == null ? 
+                    "Não há nenhum aluno cadastrado" : 
+                    "Não há alunos que comecem com " + prefix)
                     .type(MediaType.TEXT_PLAIN)
                     .build();
         }
         return Response
                 .status(Response.Status.OK)
-                .entity(db.values())
+                .entity(Arrays.toString(filtered))
                 .type(MediaType.APPLICATION_JSON)
                 .build();
     }
