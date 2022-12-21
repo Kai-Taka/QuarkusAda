@@ -1,19 +1,23 @@
 package br.com.bb.Rest;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import br.com.bb.DTO.Professor.ProfessorReceive;
+import br.com.bb.DTO.Professor.ProfessorSend;
 import br.com.bb.service.ProfessorService;
+import br.com.bb.utils.StandardResponse;
 
 @Path("/professores")
 public class ProfessorRest {
@@ -29,46 +33,42 @@ public class ProfessorRest {
     @GET
     public Response getProfessores()
     {
-       return Response
-                .ok(service.getProfessores())
-                .build();
+        return StandardResponse.get(service.getProfessores(),
+                        "Não há professores cadastrados");
     }
 
     @Path("/{id}")
     @GET
     public Response getProfessorId(@PathParam("id") int id)
     {
-        return Response
-                .ok(service.getProfessor(id))
-                .build();
+        return StandardResponse.get(Optional.of(service.getProfessor(id)),
+                                "Não existe professor com id " +
+                                id + " cadastrado no sistema");
     }
 
-    @Path("/{id}")
     @POST
-    public Response createProfessor(@PathParam("id") int id)
+    @Transactional
+    public Response createProfessor(ProfessorReceive prof)
     {
-        return Response
-                .ok(service.createProfessor())
-                .build();
+        return StandardResponse.create(service.createProfessor(prof),
+                                "Standard error"    );
     }
 
     @Path("/{id}")
     @PUT
-    public Response putProfessorId(@PathParam("id") int id)
+    @Transactional
+    public Response putProfessorId(@PathParam("id") int id, ProfessorReceive professor)
     {
-        return Response
-                .ok(service.updateProfessor(id))
-                .build();
+        return StandardResponse.update(service.updateProfessor(id, professor), 
+                                    "Professor de id "+ id + " não existe");
     }
 
     @Path("/{id}")
     @DELETE
+    @Transactional
     public Response delProfessorId(@PathParam("id") int id)
     {
         service.delProfessor(id);
-        return Response
-                .status(Response.Status.NO_CONTENT)
-                .type(MediaType.TEXT_PLAIN)
-                .build();
-}
+        return StandardResponse.noContent();                           
+    }
 }
