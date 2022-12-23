@@ -2,14 +2,17 @@ package br.com.bb.model;
 
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
-import br.com.bb.DTO.Curso.CursoSend;
+import br.com.bb.DTO.Curso.CursoSendSimple;
+import br.com.bb.DTO.Materias.MateriaSendSimple;
 import br.com.bb.DTO.Materias.MateriasSend;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -31,15 +34,20 @@ public class Materias {
 
     int horas;
 
-    @ManyToMany(mappedBy = "gradeDeMaterias")
-    Set<Curso> cursos_pertence;
+    @ManyToMany
+    (
+        mappedBy = "gradeDeMaterias",
+        fetch = FetchType.LAZY
+    )
+    
+    List<Curso> cursos_pertence;
 
     public MateriasSend toMateriaSend()
     {
-        Set<CursoSend> cursos = new HashSet<>();
+        Set<CursoSendSimple> cursos = new HashSet<>();
 
         this.cursos_pertence.stream()
-        .map(c -> c.toCursoSend())
+        .map(c -> c.toCursoSendSimple())
         .forEach(c -> cursos.add(c));;
 
         return MateriasSend.builder()
@@ -47,4 +55,11 @@ public class Materias {
                 .horas(this.horas)
                 .nome(this.nome).build();
     }
+
+    public MateriaSendSimple toMateriaSendSimple()
+    {
+        return new MateriaSendSimple(this.nome, this.horas);
+    }
+
+
 }

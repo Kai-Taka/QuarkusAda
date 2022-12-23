@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import javax.ws.rs.core.Response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.bb.DTO.MessageDto;
 
 public final class StandardResponse {

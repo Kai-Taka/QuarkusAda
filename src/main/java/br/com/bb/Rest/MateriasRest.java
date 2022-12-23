@@ -1,6 +1,7 @@
 package br.com.bb.Rest;
 
 import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -24,6 +25,7 @@ public class MateriasRest {
     }
 
     @POST
+    @Transactional
     public Response create(MateriasReceive materias)
     {
         return StandardResponse.create(service.createMaterias(materias),

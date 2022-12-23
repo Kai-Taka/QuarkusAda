@@ -1,8 +1,8 @@
 package br.com.bb.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,10 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
-import org.hibernate.annotations.ManyToAny;
-
-import br.com.bb.DTO.Curso.CursoSend;
-import br.com.bb.DTO.Materias.MateriasSend;
+import br.com.bb.DTO.Curso.CursoSendSimple;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,6 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class Curso {
     @Id
     @GeneratedValue
@@ -33,28 +31,24 @@ public class Curso {
 
     private int anos;
 
+    
     @ManyToMany
+    (
+        cascade = CascadeType.ALL
+    )
     @JoinTable
     (
         name = "cursos_pertence",
         joinColumns = @JoinColumn(name = "curso_id"),
         inverseJoinColumns = @JoinColumn(name = "materias_id")
     )
-    Set<Materias> gradeDeMaterias;
+    List<Materias> gradeDeMaterias;
 
-
-    public CursoSend toCursoSend()
-    {
-        Set<MateriasSend> grade = new HashSet<>();
-
-        this.gradeDeMaterias.stream()
-        .map(m -> m.toMateriaSend())
-        .forEach(m -> grade.add(m));
-
-        return CursoSend.builder()
-                .grade(grade)
+    public CursoSendSimple toCursoSendSimple() {
+        return CursoSendSimple.builder()
                 .anos(this.anos)
-                .nome(this.nome).build();
+                .nome(this.nome)
+                .build();
     }
 
 
