@@ -1,6 +1,5 @@
 package br.com.bb.service;
 
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -37,7 +36,7 @@ public class MateriasService {
         Materias materias = Materias.builder()
                                 .horas(materiasR.getHoras())
                                 .nome(materiasR.getNome())
-                                .cursos_pertence(new HashSet<Curso>())
+                                .cursos_pertence(new LinkedList<Curso>())
                                 .build();
 
         rep.persistAndFlush(materias);

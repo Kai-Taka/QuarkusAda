@@ -14,12 +14,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.bb.DTO.AlunoDto;
-import org.slf4j.LoggerFactory;
 
 @Path("/alunos")
 public class AlunosRest {

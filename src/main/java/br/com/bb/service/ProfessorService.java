@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.validation.Valid;
 
 import br.com.bb.DTO.Professor.ProfessorReceive;
 import br.com.bb.DTO.Professor.ProfessorSend;
@@ -64,7 +65,7 @@ public class ProfessorService {
         rep.deleteById(id);
     }
 
-    public Optional<ProfessorSend> createProfessor(ProfessorReceive prof) {
+    public Optional<ProfessorSend> createProfessor(@Valid ProfessorReceive prof) {
         log.info("Creating new professor  ");
 
         String.valueOf(AutoSetGet.allNonNull(prof));

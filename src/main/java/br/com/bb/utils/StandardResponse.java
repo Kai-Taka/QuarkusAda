@@ -7,6 +7,7 @@ import javax.ws.rs.core.Response;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import br.com.bb.DTO.ErroResponse;
 import br.com.bb.DTO.MessageDto;
 
 public final class StandardResponse {
@@ -88,6 +89,13 @@ public final class StandardResponse {
             return ok(opt);
         }
         return badRequest(err);
+    }
+
+    public static Response badRequest(ErroResponse erroResponse) {
+        return Response
+                .status(Response.Status.BAD_REQUEST)
+                .entity(erroResponse)
+                .build();
     }
 
 }

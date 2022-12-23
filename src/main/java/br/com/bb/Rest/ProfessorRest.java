@@ -1,11 +1,10 @@
 package br.com.bb.Rest;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -14,8 +13,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
+import br.com.bb.DTO.ErroResponse;
 import br.com.bb.DTO.Professor.ProfessorReceive;
-import br.com.bb.DTO.Professor.ProfessorSend;
 import br.com.bb.service.ProfessorService;
 import br.com.bb.utils.StandardResponse;
 
@@ -50,8 +49,16 @@ public class ProfessorRest {
     @Transactional
     public Response createProfessor(ProfessorReceive prof)
     {
-        return StandardResponse.create(service.createProfessor(prof),
+
+        try
+        {
+            return StandardResponse.create(service.createProfessor(prof),
                                 "Standard error"    );
+        }
+        catch(ConstraintViolationException e)
+        {
+            return StandardResponse.badRequest(new ErroResponse(e));
+        }
     }
 
     @Path("/{id}")

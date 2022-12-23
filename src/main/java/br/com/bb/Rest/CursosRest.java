@@ -1,6 +1,5 @@
 package br.com.bb.Rest;
 
-import javax.crypto.SecretKey;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.GET;
