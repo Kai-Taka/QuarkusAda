@@ -11,10 +11,11 @@ import javax.inject.Inject;
 import br.com.bb.DTO.Curso.CursoMateriaAdicionar;
 import br.com.bb.DTO.Curso.CursoReceive;
 import br.com.bb.DTO.Curso.CursoSend;
-import br.com.bb.dao.CursosRepository;
-import br.com.bb.dao.MateriasRepository;
+import br.com.bb.Repositories.CursosRepository;
+import br.com.bb.Repositories.MateriasRepository;
 import br.com.bb.model.Curso;
 import br.com.bb.model.Materias;
+import io.vertx.core.cli.Option;
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
@@ -59,6 +60,10 @@ public class CursosService {
         //materia.getCursos_pertence().add(curso);
 
         return Optional.of(new CursoSend(curso));
+    }
+
+    public Optional<CursoSend> getCurso(Integer id) {
+        return Optional.of(new CursoSend(rep.getCurso(id)));
     }
 
 }

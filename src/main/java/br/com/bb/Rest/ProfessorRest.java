@@ -45,6 +45,13 @@ public class ProfessorRest {
                                 id + " cadastrado no sistema");
     }
 
+    @Path("/{id}/curso")
+    @GET
+    public Response getCursoProfessor(@PathParam("id") Integer id)
+    {
+        return StandardResponse.ok(service.getCurso(id));
+    }
+
     @POST
     @Transactional
     public Response createProfessor(ProfessorReceive prof)

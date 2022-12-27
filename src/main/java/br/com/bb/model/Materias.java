@@ -11,6 +11,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import br.com.bb.DTO.Curso.CursoSendSimple;
 import br.com.bb.DTO.Materias.MateriaSendSimple;
 import br.com.bb.DTO.Materias.MateriasSend;
@@ -39,7 +42,6 @@ public class Materias {
         mappedBy = "gradeDeMaterias",
         fetch = FetchType.LAZY
     )
-    
     List<Curso> cursos_pertence;
 
     public MateriasSend toMateriaSend()

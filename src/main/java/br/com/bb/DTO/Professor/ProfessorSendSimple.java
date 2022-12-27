@@ -1,32 +1,22 @@
 package br.com.bb.DTO.Professor;
 
-import java.util.List;
-
-import br.com.bb.model.Aluno;
 import br.com.bb.model.Professor;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder
-@AllArgsConstructor
-public class ProfessorSend {
-
+public class ProfessorSendSimple {
+    
     private String nome;
 
     private String titulo;
 
     private Character sexo;
-
-    private List<Aluno> tutorados;
     
-    public ProfessorSend(Professor tutor) 
+    public ProfessorSendSimple(Professor tutor) 
     {
         this.nome = tutor.getName();
         this.titulo = tutor.getTitulo();
         this.sexo = tutor.getSexo();
-        this.tutorados = tutor.getTutorados();
     }
 
 }

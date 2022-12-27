@@ -1,17 +1,16 @@
-package br.com.bb.dao;
+package br.com.bb.Repositories;
 
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.ws.rs.ApplicationPath;
 
-import br.com.bb.model.Curso;
+import br.com.bb.model.Materias;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
 @ApplicationScoped
-public class CursosRepository implements PanacheRepositoryBase<Curso, Integer>{
+public class MateriasRepository implements PanacheRepositoryBase<Materias, Integer>{
 
-    public List<Curso> getAll()
+    public List<Materias> getAll()
     {
         return listAll();
     }

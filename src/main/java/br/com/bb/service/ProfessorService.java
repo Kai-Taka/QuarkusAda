@@ -8,9 +8,12 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import br.com.bb.DTO.Curso.CursoSend;
 import br.com.bb.DTO.Professor.ProfessorReceive;
 import br.com.bb.DTO.Professor.ProfessorSend;
-import br.com.bb.dao.ProfessorRepository;
+import br.com.bb.Errors.NotInDatabaseException;
+import br.com.bb.Repositories.ProfessorRepository;
+import br.com.bb.model.Curso;
 import br.com.bb.model.Professor;
 import br.com.bb.utils.AutoSetGet;
 import lombok.extern.slf4j.Slf4j;
@@ -35,28 +38,22 @@ public class ProfessorService {
         return professores; 
     }
 
-    public Optional<Professor> getProfessor(int id) {
+    public Optional<ProfessorSend> getProfessor(int id) {
         log.info("Retornando professor de id " + id);
-        return rep.getById(id);
+        return Optional.of(new ProfessorSend(rep.getById(id)));
     }
 
-    public Optional<ProfessorSend> updateProfessor(int id, ProfessorReceive prof) {
+    public Optional<ProfessorSend> updateProfessor(int id, @Valid ProfessorReceive prof) {
         log.info("Atualizando profssor: " + id);
-        Optional<Professor> opt = rep.getById(id);
-        if (AutoSetGet.allNonNull(prof) && opt.isPresent())
-        {
-            Professor professor = opt.get();
-            professor.setName(prof.getNome());
-            professor.setSexo(prof.getSexo());
-            professor.setTitulo(prof.getTitulo());
-            
-            rep.persist(professor);
+        Professor professor = rep.getById(id);
+        professor.setName(prof.getNome());
+        professor.setSexo(prof.getSexo());
+        professor.setTitulo(prof.getTitulo());
+        
+        rep.persist(professor);
 
-            return Optional.of(professor.toSendProfessor());
-            
-        }
+        return Optional.of(professor.toSendProfessor());
 
-        return Optional.empty();
     }
 
     public void delProfessor(int id) {
@@ -83,6 +80,15 @@ public class ProfessorService {
         }
 
         return Optional.empty();
+    }
+
+    public Optional<CursoSend> getCurso(Integer id) {
+        Professor professor = rep.getById(id);
+
+        Curso curso = professor.getCursosMinistrado();
+        if (curso == null) throw new NotInDatabaseException("Professo não ministra curso especifico");
+        
+        return Optional.of(new CursoSend(curso));
     }
 
 }

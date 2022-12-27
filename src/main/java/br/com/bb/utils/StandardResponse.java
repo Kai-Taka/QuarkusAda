@@ -98,4 +98,19 @@ public final class StandardResponse {
                 .build();
     }
 
+    public static Response serverError(ErroResponse erroResponse)
+    {
+        return Response
+                .status(500)
+                .entity(erroResponse)
+                .build();
+    }
+
+    public static Response notFound(ErroResponse erroResponse) {
+        return Response
+                .status(Response.Status.NOT_FOUND)
+                .entity(erroResponse)
+                .build();
+    }
+
 }

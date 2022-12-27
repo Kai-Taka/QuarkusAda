@@ -1,8 +1,15 @@
 package br.com.bb.model;
 
+import java.util.List;
+
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.com.bb.DTO.Professor.ProfessorSend;
 import lombok.AllArgsConstructor;
@@ -27,11 +34,20 @@ public class Professor {
 
     private char sexo;
 
+    @OneToMany(mappedBy = "tutor")
+    @JsonIgnore
+    private List<Aluno> tutorados;
+
+    @OneToOne(mappedBy = "titular", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Curso cursosMinistrado;
+
     public ProfessorSend toSendProfessor()
     {
         return ProfessorSend.builder()
                 .nome(this.name)
                 .titulo(this.titulo)
+                .tutorados(this.tutorados)
                 .sexo(this.sexo).build();
     }
 }

@@ -1,10 +1,11 @@
-package br.com.bb.dao;
+package br.com.bb.Repositories;
 
 import java.util.List;
 import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import br.com.bb.Errors.NotInDatabaseException;
 import br.com.bb.model.Professor;
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
@@ -16,9 +17,17 @@ public class ProfessorRepository implements PanacheRepositoryBase<Professor, Int
         return listAll();
     }
 
-    public Optional<Professor> getById(int id)
+    public Professor getById(int id)
     {
-        return findByIdOptional(id);
+        Professor professor = findById(id);
+
+        if (professor == null)
+        {
+            throw new NotInDatabaseException("Professor de id: " +
+                                            id + " não existe");
+        }
+
+        return professor;
     }
 
 }

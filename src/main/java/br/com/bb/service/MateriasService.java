@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import br.com.bb.DTO.Materias.MateriasReceive;
 import br.com.bb.DTO.Materias.MateriasSend;
-import br.com.bb.dao.MateriasRepository;
+import br.com.bb.Repositories.MateriasRepository;
 import br.com.bb.model.Curso;
 import br.com.bb.model.Materias;
 

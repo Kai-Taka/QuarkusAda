@@ -1,72 +1,37 @@
 package br.com.bb.Rest;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.ws.rs.Consumes;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import br.com.bb.DTO.AlunoDto;
+import br.com.bb.DTO.Aluno.AlunoReceive;
+import br.com.bb.service.AlunoService;
+import br.com.bb.utils.StandardResponse;
 
 @Path("/alunos")
 public class AlunosRest {
-    private static Map<Integer, AlunoDto> db = new HashMap<>();
-    private static final Logger log = LoggerFactory.getLogger(AlunosRest.class);
+    @Inject
+    AlunoService service;
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addAluno(AlunoDto aluno)
+    @Transactional
+    public Response addAluno(AlunoReceive aluno)
     {
-        log.info("Attempting to add " + aluno);
-
-        if(db.get(aluno.getId()) == null)
-        {
-            db.put(aluno.getId(), aluno);
-            return Response.created(null).build();
-        }
-        return Response
-                .status(Response.Status.BAD_REQUEST)
-                .entity("'Já exite um aluno com este ID'")
-                .type(MediaType.TEXT_PLAIN)
-                .build();
+        return StandardResponse.created(service.createAluno(aluno));
     }
 
     @GET
     public Response getAllAlunos(@QueryParam("prefixo") String prefix)
     {
-        log.info("Getting all alunos with prefix: " + prefix);
-
-        AlunoDto[] filtered = (AlunoDto[]) db.values().stream()
-        .filter(a -> a.getName().startsWith(prefix))
-        .toArray();
-
-        if (filtered.length == 0)
-        {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .entity(prefix == null ? 
-                    "Não há nenhum aluno cadastrado" : 
-                    "Não há alunos que comecem com " + prefix)
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-        }
-        return Response
-                .status(Response.Status.OK)
-                .entity(Arrays.toString(filtered))
-                .type(MediaType.APPLICATION_JSON)
-                .build();
+        return StandardResponse.ok(service.getAll()); 
     }
 
     @Path("/{id}")
@@ -76,58 +41,38 @@ public class AlunosRest {
         @PathParam("id") Integer id
     )
     {
-        if (db.containsKey(id))
-        {
-            return Response
-                    .status(Response.Status.OK)
-                    .entity(db.get(id))
-                    .type(MediaType.APPLICATION_JSON)
-                    .build();
-        }
-        return Response
-                .status(Response.Status.NOT_FOUND)
-                .entity("Não há aluno com este id")
-                .type(MediaType.TEXT_PLAIN)
-                .build();
+        
+        return StandardResponse.ok(service.getAluno(id));
+    }
+
+    @Path("/{id}/tutor")
+    @GET
+    public Response getTutorDoAlunoEspecifico(@PathParam("id") Integer id)
+    {
+        return StandardResponse.ok(service.getTutor(id));
     }
 
     @Path("/{id}")
     @PUT
-    @Consumes(MediaType.TEXT_PLAIN)
     public Response updateAluno(String name, @PathParam("id") Integer id)
     {
-        if (db.get(id) == null)
-        {
-            return Response
-                    .status(Response.Status.NOT_FOUND)
-                    .entity("Não há aluno com esse id")
-                    .build();
-        }
-        db.get(id).setName(name);
-
-        return Response
-                .status(Response.Status.OK)
-                .entity(db.get(id))
-                .build();
+        return StandardResponse.ok(service.updateAlunoName(name, id));
     }
 
     @Path("/{id}")
     @DELETE
     public Response deleteAlunoEspecifico(@PathParam("id") Integer id)
     {
-        if (db.containsKey(id))
-        {
-            db.remove(id);
-            return Response
-                    .status(Response.Status.NO_CONTENT)
-                    .entity("Removido aluno com id: " + id)
-                    .type(MediaType.TEXT_PLAIN)
-                    .build();
-        }
-        return Response
-                .status(Response.Status.NOT_FOUND)
-                .entity("Não há aluno com este id")
-                .type(MediaType.TEXT_PLAIN)
-                .build();
+        service.deleteAlunoEspecifico(id);
+
+        return StandardResponse.noContent();
+    }
+    
+    @Path("{idAluno}/tutor/{idProfessor}")
+    @PATCH
+    @Transactional
+    public Response anexarProfessorAoAluno(@PathParam("idAluno") Integer idAluno, @PathParam("idProfessor") Integer idProfessor)
+    {
+        return StandardResponse.ok(service.adicionarTutor(idAluno, idProfessor));
     }
 }
