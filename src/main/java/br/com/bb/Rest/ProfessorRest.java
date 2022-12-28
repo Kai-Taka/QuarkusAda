@@ -56,16 +56,8 @@ public class ProfessorRest {
     @Transactional
     public Response createProfessor(ProfessorReceive prof)
     {
-
-        try
-        {
-            return StandardResponse.create(service.createProfessor(prof),
-                                "Standard error"    );
-        }
-        catch(ConstraintViolationException e)
-        {
-            return StandardResponse.badRequest(new ErroResponse(e));
-        }
+        return StandardResponse.create(service.createProfessor(prof),
+                            "Standard error"    );
     }
 
     @Path("/{id}")

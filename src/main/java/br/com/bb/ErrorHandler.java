@@ -1,5 +1,6 @@
 package br.com.bb;
 
+import javax.validation.ConstraintViolationException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
@@ -21,6 +22,10 @@ public class ErrorHandler implements ExceptionMapper<Exception>{@Override
                     .message(e.getMessage())
                     .build()   
             );
+        }
+        else if(e instanceof ConstraintViolationException)
+        {
+            return StandardResponse.badRequest(new ErroResponse((ConstraintViolationException) e));
         }
 
         return StandardResponse.serverError(
