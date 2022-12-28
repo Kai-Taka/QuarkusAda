@@ -14,9 +14,7 @@ public class ProfessorReceive {
     @NotBlank(message = "Nome não pode ser nulo")
     private String nome;
 
+    @NotBlank(message = "Titulo não pode ser nulo")
     private String titulo;
-
-    
-    private Character sexo;
     
 }

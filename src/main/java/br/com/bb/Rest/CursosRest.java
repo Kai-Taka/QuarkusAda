@@ -2,6 +2,7 @@ package br.com.bb.Rest;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -52,4 +53,13 @@ public class CursosRest {
         return StandardResponse.ok(service.getCurso(id));
     }
 
+    @Path("/{id}")
+    @DELETE
+    @Transactional
+    public Response deleteById(@PathParam("id") Integer id)
+    {
+        service.deleteById(id);
+        
+        return StandardResponse.noContent();
+    }
 }

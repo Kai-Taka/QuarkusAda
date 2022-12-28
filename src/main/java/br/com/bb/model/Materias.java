@@ -44,24 +44,4 @@ public class Materias {
     )
     List<Curso> cursos_pertence;
 
-    public MateriasSend toMateriaSend()
-    {
-        Set<CursoSendSimple> cursos = new HashSet<>();
-
-        this.cursos_pertence.stream()
-        .map(c -> c.toCursoSendSimple())
-        .forEach(c -> cursos.add(c));;
-
-        return MateriasSend.builder()
-                .cursos(cursos)
-                .horas(this.horas)
-                .nome(this.nome).build();
-    }
-
-    public MateriaSendSimple toMateriaSendSimple()
-    {
-        return new MateriaSendSimple(this.nome, this.horas);
-    }
-
-
 }

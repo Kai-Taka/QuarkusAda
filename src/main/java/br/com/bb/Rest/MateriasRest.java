@@ -2,9 +2,11 @@ package br.com.bb.Rest;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Response;
 
 import br.com.bb.DTO.Materias.MateriasReceive;
@@ -30,6 +32,16 @@ public class MateriasRest {
     {
         return StandardResponse.create(service.createMaterias(materias),
                                     "Erro na criação da materia, já existe");
+    }
+
+    @Path("/{id}")
+    @DELETE
+    @Transactional
+    public Response deleteById(@PathParam("id") Integer id)
+    {
+        service.delete(id);
+        
+        return StandardResponse.noContent();
     }
 
 }   

@@ -9,14 +9,11 @@ public class ProfessorSendSimple {
     private String nome;
 
     private String titulo;
-
-    private Character sexo;
     
     public ProfessorSendSimple(Professor tutor) 
     {
         this.nome = tutor.getName();
         this.titulo = tutor.getTitulo();
-        this.sexo = tutor.getSexo();
     }
 
 }

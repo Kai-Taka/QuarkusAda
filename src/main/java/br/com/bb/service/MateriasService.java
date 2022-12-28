@@ -3,9 +3,11 @@ package br.com.bb.service;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.validation.Valid;
 
 import br.com.bb.DTO.Materias.MateriasReceive;
 import br.com.bb.DTO.Materias.MateriasSend;
@@ -21,17 +23,13 @@ public class MateriasService {
 
     public List<MateriasSend> getAll()
     {
-        List<MateriasSend> materias = new LinkedList<>();
-
-        rep.getAll().stream()
-        .map(m -> m.toMateriaSend())
-        .forEach(m -> materias.add(m));
-
-        return materias;
+        return rep.getAll().stream()
+        .map(m -> new MateriasSend(m))
+        .collect(Collectors.toList());
 
     }
 
-    public Optional<MateriasSend> createMaterias(MateriasReceive materiasR)
+    public Optional<MateriasSend> createMaterias(@Valid MateriasReceive materiasR)
     {
         Materias materias = Materias.builder()
                                 .horas(materiasR.getHoras())
@@ -41,7 +39,11 @@ public class MateriasService {
 
         rep.persistAndFlush(materias);
 
-        return Optional.of(materias.toMateriaSend());
+        return Optional.of(new MateriasSend(materias));
+    }
+
+    public void delete(Integer id) {
+        rep.deleteById(id);
     }
     
 }

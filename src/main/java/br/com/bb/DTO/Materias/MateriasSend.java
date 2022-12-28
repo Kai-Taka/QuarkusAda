@@ -1,8 +1,10 @@
 package br.com.bb.DTO.Materias;
 
-import java.util.Set;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import br.com.bb.DTO.Curso.CursoSendSimple;
+import br.com.bb.model.Materias;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,10 +14,20 @@ import lombok.Data;
 @AllArgsConstructor
 public class MateriasSend {
     
-    private Set<CursoSendSimple> cursos;
+    private List<CursoSendSimple> cursos;
 
     private String nome;
 
     private int horas;
+
+    public MateriasSend(Materias materia)
+    {
+        this.nome = materia.getNome();
+        this.horas = materia.getHoras();
+        this.cursos = materia.getCursos_pertence()
+                        .stream()
+                        .map(c -> new CursoSendSimple(c))
+                        .collect(Collectors.toList());
+    }
 
 }

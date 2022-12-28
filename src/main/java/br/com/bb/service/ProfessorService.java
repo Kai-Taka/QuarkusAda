@@ -3,6 +3,7 @@ package br.com.bb.service;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -28,14 +29,9 @@ public class ProfessorService {
     public List<ProfessorSend> getProfessores()
     {
         log.info("Retornando todos os professores");
-        List<ProfessorSend> professores = new LinkedList<>();
-
-        rep.findAll()
-        .stream()
-        .map(p -> p.toSendProfessor())
-        .forEach(p -> professores.add(p));
-
-        return professores; 
+        return rep.getAll().stream()
+                    .map(p -> new ProfessorSend(p))
+                    .collect(Collectors.toList());
     }
 
     public Optional<ProfessorSend> getProfessor(int id) {
@@ -47,12 +43,11 @@ public class ProfessorService {
         log.info("Atualizando profssor: " + id);
         Professor professor = rep.getById(id);
         professor.setName(prof.getNome());
-        professor.setSexo(prof.getSexo());
         professor.setTitulo(prof.getTitulo());
         
         rep.persist(professor);
 
-        return Optional.of(professor.toSendProfessor());
+        return Optional.of(new ProfessorSend(professor));
 
     }
 
@@ -70,13 +65,12 @@ public class ProfessorService {
         {
             Professor professor = Professor.builder()
                                     .name(prof.getNome())
-                                    .sexo(prof.getSexo())
                                     .titulo(prof.getTitulo())
                                     .build();
 
             rep.persist(professor);
 
-            return Optional.of(professor.toSendProfessor());
+            return Optional.of(new ProfessorSend(professor));
         }
 
         return Optional.empty();

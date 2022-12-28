@@ -17,15 +17,12 @@ public class ProfessorSend {
 
     private String titulo;
 
-    private Character sexo;
-
     private List<Aluno> tutorados;
     
     public ProfessorSend(Professor tutor) 
     {
         this.nome = tutor.getName();
         this.titulo = tutor.getTitulo();
-        this.sexo = tutor.getSexo();
         this.tutorados = tutor.getTutorados();
     }
 

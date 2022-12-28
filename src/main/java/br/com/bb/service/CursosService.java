@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.validation.Valid;
 
 import br.com.bb.DTO.Curso.CursoMateriaAdicionar;
 import br.com.bb.DTO.Curso.CursoReceive;
@@ -15,7 +16,6 @@ import br.com.bb.Repositories.CursosRepository;
 import br.com.bb.Repositories.MateriasRepository;
 import br.com.bb.model.Curso;
 import br.com.bb.model.Materias;
-import io.vertx.core.cli.Option;
 import lombok.extern.slf4j.Slf4j;
 
 @ApplicationScoped
@@ -36,7 +36,7 @@ public class CursosService {
         
     }
 
-    public Optional<CursoSend> criarCurso(CursoReceive cursoR)
+    public Optional<CursoSend> criarCurso(@Valid CursoReceive cursoR)
     {
         Curso curso = Curso.builder()
                         .anos(cursoR.getAnos())
@@ -64,6 +64,11 @@ public class CursosService {
 
     public Optional<CursoSend> getCurso(Integer id) {
         return Optional.of(new CursoSend(rep.getCurso(id)));
+    }
+
+    public void deleteById(Integer id) 
+    {
+        rep.deleteById(id);
     }
 
 }

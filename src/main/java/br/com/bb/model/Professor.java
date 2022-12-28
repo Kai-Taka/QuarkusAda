@@ -11,7 +11,6 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.bb.DTO.Professor.ProfessorSend;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -42,12 +41,4 @@ public class Professor {
     @JsonIgnore
     private Curso cursosMinistrado;
 
-    public ProfessorSend toSendProfessor()
-    {
-        return ProfessorSend.builder()
-                .nome(this.name)
-                .titulo(this.titulo)
-                .tutorados(this.tutorados)
-                .sexo(this.sexo).build();
-    }
 }
