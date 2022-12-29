@@ -31,8 +31,6 @@ public class Professor {
 
     private String titulo;
 
-    private char sexo;
-
     @OneToMany(mappedBy = "tutor")
     @JsonIgnore
     private List<Aluno> tutorados;

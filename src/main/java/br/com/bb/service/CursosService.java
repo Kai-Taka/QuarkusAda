@@ -28,11 +28,11 @@ public class CursosService {
     @Inject
     MateriasRepository matRep;
 
-    public List<CursoSend> getAll()
+    public Optional<List<CursoSend>> getAll()
     {
-        return rep.getAll().stream()
+        return Optional.of(rep.getAll().stream()
             .map(c-> new CursoSend(c))
-            .collect(Collectors.toList());
+            .collect(Collectors.toList()));
         
     }
 

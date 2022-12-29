@@ -34,8 +34,7 @@ public class CursosRest {
     @Transactional
     public Response getAllCursos()
     {
-        return StandardResponse.get(service.getAll(), 
-                    "Não existem cursos cadastrados");
+        return StandardResponse.ok(service.getAll());
     }
 
     @PUT

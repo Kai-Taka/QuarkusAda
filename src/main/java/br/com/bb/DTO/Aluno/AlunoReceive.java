@@ -10,8 +10,8 @@ import lombok.Data;
 @AllArgsConstructor
 @Builder
 public class AlunoReceive {
-    @NotBlank
+    @NotBlank(message = "Name cannot be null")
     private String name;
-    @NotBlank
+    @NotBlank(message = "Curso cannot be null")
     private String curso;
 }

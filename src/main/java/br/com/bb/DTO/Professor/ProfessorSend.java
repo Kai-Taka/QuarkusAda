@@ -21,9 +21,12 @@ public class ProfessorSend {
     
     public ProfessorSend(Professor tutor) 
     {
-        this.nome = tutor.getName();
-        this.titulo = tutor.getTitulo();
-        this.tutorados = tutor.getTutorados();
+        if (tutor != null)
+        {
+            this.nome = tutor.getName();
+            this.titulo = tutor.getTitulo();
+            this.tutorados = tutor.getTutorados();
+        }
     }
 
 }

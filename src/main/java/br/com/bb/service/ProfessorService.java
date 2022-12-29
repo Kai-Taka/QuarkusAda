@@ -9,10 +9,13 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
 
+import org.hibernate.action.internal.OrphanRemovalAction;
+
 import br.com.bb.DTO.Curso.CursoSend;
 import br.com.bb.DTO.Professor.ProfessorReceive;
 import br.com.bb.DTO.Professor.ProfessorSend;
 import br.com.bb.Errors.NotInDatabaseException;
+import br.com.bb.Repositories.CursosRepository;
 import br.com.bb.Repositories.ProfessorRepository;
 import br.com.bb.model.Curso;
 import br.com.bb.model.Professor;
@@ -25,6 +28,9 @@ public class ProfessorService {
 
     @Inject
     ProfessorRepository rep;
+
+    @Inject
+    CursosRepository cursoRep;
     
     public List<ProfessorSend> getProfessores()
     {
@@ -83,6 +89,19 @@ public class ProfessorService {
         if (curso == null) throw new NotInDatabaseException("Professo não ministra curso especifico");
         
         return Optional.of(new CursoSend(curso));
+    }
+
+    public Optional<ProfessorSend> linkCursoProfessor(Integer idProfessor, Integer idCurso) {
+        
+        Professor professor = rep.getById(idProfessor);
+
+        Curso curso = cursoRep.getCurso(idCurso);
+
+        professor.setCursosMinistrado(curso);
+        rep.persist(professor);
+
+        return Optional.of(new ProfessorSend(professor));
+
     }
 
 }

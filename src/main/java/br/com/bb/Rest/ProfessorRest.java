@@ -7,6 +7,7 @@ import javax.transaction.Transactional;
 import javax.validation.ConstraintViolationException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.PATCH;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -77,4 +78,13 @@ public class ProfessorRest {
         service.delProfessor(id);
         return StandardResponse.noContent();                           
     }
+
+    @Path("/{idProfessor}/curso/{idCurso}")
+    @PATCH
+    @Transactional
+    public Response linkCursoProfessor(@PathParam("idProfessor")Integer idProfessor, @PathParam("idCurso") Integer idCurso)
+    {
+        return StandardResponse.ok(service.linkCursoProfessor(idProfessor, idCurso));
+    }
+
 }

@@ -28,6 +28,8 @@ public class ErrorHandler implements ExceptionMapper<Exception>{@Override
             return StandardResponse.badRequest(new ErroResponse((ConstraintViolationException) e));
         }
 
+        log.error("error {}", e);
+
         return StandardResponse.serverError(
             ErroResponse.builder()
                 .message(e.getMessage())
